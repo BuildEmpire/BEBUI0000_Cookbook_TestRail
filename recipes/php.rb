@@ -3,6 +3,8 @@
 # Recipe:: php
 #
 
+package "unzip"
+
 # Set the php initialisation options
 node.set['php']['directives'] = {
     'date.timezone' => 'Europe/London',
@@ -59,6 +61,48 @@ Array(node["cookbook_testrail"]["php_pears"]).each_with_index do |pear_name, ind
     action :install
   end
 end
+
+
+
+
+archive_directory = Chef::Config[:file_cache_path]
+zip_name = "TeamCity-BuildAgent.zip"
+zip_dest = "#{archive_directory}/#{zip_name}"
+zip_source = node['teamcity_build_agent']['server_url'] + "/update/buildAgent.zip"
+install_dir = "/opt/teamcity/buildAgent"
+
+# Download the build agent from the teamcity server
+remote_file zip_dest do
+  source zip_source
+  action :create_if_missing
+end
+
+# Remove the installation directory
+directory install_dir do
+  action :delete
+  recursive true
+end
+
+# Create the installation directory
+directory install_dir do
+  mode "0755"
+  action :create
+end
+
+# Unzip the build agent into the installation directory
+bash "unzip-buildAgent" do
+  code <<-EOH
+    unzip #{zip_dest} -d #{install_dir}
+  EOH
+end
+
+# Remove the installation zip
+file zip_dest do
+  action :delete
+end
+
+
+
 
 service "php-fpm" do
   action :restart

@@ -22,6 +22,7 @@ default['cookbook_testrail']['cron_minute'] = '*/5'
 
 default['cookbook_testrail']['php_packages'] = []
 default['cookbook_testrail']['php_pears'] = []
+default['cookbook_testrail']['ioncube']['download_url'] = 'http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.zip'
 
 default['cookbook_testrail']['mysql']['max_allowed_packet'] = '128M'
 

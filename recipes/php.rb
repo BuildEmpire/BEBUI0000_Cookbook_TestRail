@@ -3,6 +3,12 @@
 # Recipe:: php
 #
 
+archive_directory = Chef::Config[:file_cache_path]
+zip_name = "ioncube.zip"
+zip_dest = "#{archive_directory}/#{zip_name}"
+zip_source = node['cookbook_testrail']['ioncube']['download_url']
+install_dir = "/opt/ioncube"
+
 package "unzip"
 
 # Set the php initialisation options
@@ -16,8 +22,12 @@ node.set['php']['directives'] = {
     'post_max_size' => '100M',
     'max_execution_time' => '600',
     'opcache.enable' => '1',
-    'oci8.statement_cache_size' => 0
+    'oci8.statement_cache_size' => 0,
+    'zend_extension' => "#{install_dir}/ioncube/ioncube_loader_lin_5.5.so"
 }
+
+node.set['php']['conf_dir'] = '/etc/php5/fpm'
+node.set['php']['ext_conf_dir']  = 'etc/php5/fpm/conf.d'
 
 node.set['php-fpm']['pools'] = [
     {
@@ -62,16 +72,7 @@ Array(node["cookbook_testrail"]["php_pears"]).each_with_index do |pear_name, ind
   end
 end
 
-
-
-
-archive_directory = Chef::Config[:file_cache_path]
-zip_name = "TeamCity-BuildAgent.zip"
-zip_dest = "#{archive_directory}/#{zip_name}"
-zip_source = node['teamcity_build_agent']['server_url'] + "/update/buildAgent.zip"
-install_dir = "/opt/teamcity/buildAgent"
-
-# Download the build agent from the teamcity server
+# Download IONCube file from the server
 remote_file zip_dest do
   source zip_source
   action :create_if_missing
@@ -89,8 +90,8 @@ directory install_dir do
   action :create
 end
 
-# Unzip the build agent into the installation directory
-bash "unzip-buildAgent" do
+# Unzip IONCube into the installation directory
+bash "unzip-IONCube" do
   code <<-EOH
     unzip #{zip_dest} -d #{install_dir}
   EOH
@@ -100,8 +101,6 @@ end
 file zip_dest do
   action :delete
 end
-
-
 
 
 service "php-fpm" do

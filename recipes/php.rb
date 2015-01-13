@@ -26,9 +26,6 @@ node.set['php']['directives'] = {
     'zend_extension' => "#{install_dir}/ioncube/ioncube_loader_lin_5.5.so"
 }
 
-node.set['php']['conf_dir'] = '/etc/php5/fpm'
-node.set['php']['ext_conf_dir']  = 'etc/php5/fpm/conf.d'
-
 node.set['php-fpm']['pools'] = [
     {
         :name => "www",
@@ -70,6 +67,16 @@ Array(node["cookbook_testrail"]["php_pears"]).each_with_index do |pear_name, ind
   php_pear pear_name do
     action :install
   end
+end
+
+# Write the same custom php.ini file to the fpm location too (default is cli location)
+template '/etc/php5/fpm/php.ini' do
+  source 'php.ini.erb'
+  cookbook 'php'
+  owner 'root'
+  group 'root'
+  mode '0644'
+  variables(:directives => node['php']['directives'])
 end
 
 # Download IONCube file from the server

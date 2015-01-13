@@ -18,7 +18,7 @@ default['cookbook_testrail']['default_config']['nginx']['listen_port'] = '80'
 
 default['cookbook_testrail']['cronic'] = '/opt/bin/cronic'
 default['cookbook_testrail']['cron_hour'] = '*'
-default['cookbook_testrail']['cron_minute'] = '*/5'
+default['cookbook_testrail']['cron_minute'] = '*'
 
 default['cookbook_testrail']['php_packages'] = []
 default['cookbook_testrail']['php_pears'] = []

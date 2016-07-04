@@ -32,13 +32,5 @@ default['cookbook_testrail']['htpasswd']['path'] = ''
 
 default['cookbook_testrail']['newrelic']['license_key'] = nil
 
-default['cookbook_testrail']['rackspace']['username'] = ''
-default['cookbook_testrail']['rackspace']['api_key'] = ''
-default['cookbook_testrail']['rackspace']['auth_region'] = 'uk'
-default['cookbook_testrail']['rackspace']['endpoint'] = 'lon'
-default['cookbook_testrail']['rackspace']['monitoring'] = true
-default['cookbook_testrail']['rackspace']['backup'] = true
-default['cookbook_testrail']['rackspace']['backup_container'] = ''
-
 default['build-essential']['compile_time'] = true
 
